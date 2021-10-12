@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { readDeck } from "../utils/api/index";
 
@@ -60,7 +60,7 @@ export default function Study() {
               <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page" key="2">
-              <Link to="/">Study</Link>
+              Study
             </li>
           </ol>
         </nav>
