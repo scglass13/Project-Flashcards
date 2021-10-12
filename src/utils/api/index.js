@@ -34,33 +34,21 @@ function stripCards(deck) {
  *  the url for the requst.
  * @param options
  *  any options for fetch
- * @param onCancel
- *  default value returned if the fetch is cancelled.
  * @returns {Promise<Error|any>}
  *  a promise that resolves to the `json` data or an error.
  *  If the response is not in the 200 - 399 range the promise is rejected.
  */
-
-async function fetchJson(url, options, onCancel) {
+async function fetchJson(url, options) {
   try {
     const response = await fetch(url, options);
-
     if (response.status < 200 || response.status > 399) {
       throw new Error(`${response.status} - ${response.statusText}`);
     }
-
-    if (response.status === 204) {
-      return null;
-    }
-
     return await response.json();
-
   } catch (error) {
     if (error.name !== "AbortError") {
-      console.error(error.stack);
       throw error;
     }
-    return Promise.resolve(onCancel);
   }
 }
 
@@ -71,7 +59,7 @@ async function fetchJson(url, options, onCancel) {
  */
 export async function listDecks(signal) {
   const url = `${API_BASE_URL}/decks?_embed=cards`;
-  return await fetchJson(url, { signal }, []);
+  return await fetchJson(url, { signal });
 }
 
 /**
@@ -92,7 +80,7 @@ export async function createDeck(deck, signal) {
     body: JSON.stringify(stripCards(deck)),
     signal,
   };
-  return await fetchJson(url, options, {});
+  return await fetchJson(url, options);
 }
 
 /**
@@ -106,7 +94,7 @@ export async function createDeck(deck, signal) {
  */
 export async function readDeck(deckId, signal) {
   const url = `${API_BASE_URL}/decks/${deckId}?_embed=cards`;
-  return await fetchJson(url, { signal }, {});
+  return await fetchJson(url, { signal });
 }
 
 /**
@@ -126,7 +114,7 @@ export async function updateDeck(updatedDeck, signal) {
     body: JSON.stringify(stripCards(updatedDeck)),
     signal,
   };
-  return await fetchJson(url, options, updatedDeck);
+  return await fetchJson(url, options);
 }
 
 /**
@@ -142,6 +130,20 @@ export async function deleteDeck(deckId, signal) {
   const url = `${API_BASE_URL}/decks/${deckId}`;
   const options = { method: "DELETE", signal };
   return await fetchJson(url, options);
+}
+
+/**
+ * Retrieves all cards associated with the specified `deckId`.
+ * @param deckId
+ *  the id of the target deck
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to a possible empty array of cards.
+ */
+export async function listCards(deckId, signal) {
+  const url = `${API_BASE_URL}/cards?deckId=${deckId}`;
+  return await fetchJson(url, { signal });
 }
 
 /**
@@ -167,7 +169,7 @@ export async function createCard(deckId, card, signal) {
     body: JSON.stringify(card),
     signal,
   };
-  return await fetchJson(url, options, card);
+  return await fetchJson(url, options);
 }
 
 /**
@@ -181,7 +183,7 @@ export async function createCard(deckId, card, signal) {
  */
 export async function readCard(cardId, signal) {
   const url = `${API_BASE_URL}/cards/${cardId}`;
-  return await fetchJson(url, { signal }, {});
+  return await fetchJson(url, { signal });
 }
 
 /**
@@ -200,7 +202,7 @@ export async function updateCard(updatedCard, signal) {
     headers,
     body: JSON.stringify(updatedCard),
   };
-  return await fetchJson(url, options, updatedCard);
+  return await fetchJson(url, options);
 }
 
 /**

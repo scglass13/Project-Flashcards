@@ -7,21 +7,23 @@ import {
   listCards,
 } from "../utils/api/index";
 
-export default function Deck() {
+function Deck() {
   const [deck, setDeck] = useState({});
   const [cards, setCards] = useState({});
-  const params = useParams;
+  const params = useParams();
   const deckId = params.deckId;
-
+  //console.log(deckId);
   useEffect(() => {
     setCards({});
     async function loadData() {
       try {
         const dataFromAPI = await readDeck(deckId);
+        console.log(dataFromAPI);
         setDeck(dataFromAPI);
         setCards(dataFromAPI.cards);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -43,6 +45,7 @@ export default function Deck() {
           history.push("/");
         } catch (error) {
           if (error.name === "AbortError") {
+            // Ignore `AbortError`
             console.log("Aborted");
           } else {
             throw error;
@@ -63,9 +66,11 @@ export default function Deck() {
         try {
           await deleteCard(value);
           const dataFromAPI2 = await listCards(deckId);
+          console.log(deckId, dataFromAPI2);
           setCards(dataFromAPI2);
         } catch (error) {
           if (error.name === "AbortError") {
+            // Ignore `AbortError`
             console.log("Aborted");
           } else {
             throw error;
@@ -199,3 +204,4 @@ export default function Deck() {
     );
   }
 }
+export default Deck;

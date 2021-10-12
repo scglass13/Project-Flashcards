@@ -3,7 +3,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import CardForm from "./CardForm";
 import { readDeck, createCard } from "../utils/api/index";
 
-export default function CardCreate() {
+function CardCreate() {
   const params = useParams();
   const [deck, setDeck] = useState([]);
   const deckId = params.deckId;
@@ -16,7 +16,7 @@ export default function CardCreate() {
   const handleChange = ({ target }) => {
     const value = target.value;
     setFormData({
-      ...FormData,
+      ...formData,
       [target.name]: value,
     });
   };
@@ -27,6 +27,7 @@ export default function CardCreate() {
         setDeck(dataFromAPI);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -46,6 +47,7 @@ export default function CardCreate() {
         setFormData(initialFormState);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -75,7 +77,7 @@ export default function CardCreate() {
         <h2>{deck.name}: Add Card</h2>
         <form onSubmit={handleSubmit}>
           <CardForm formData={formData} handleChange={handleChange} />
-          <Link to={`/decks/${deckId}`} className="btn btn-primary">
+          <Link to={`/decks/${deckId}`} className="btn btn-secondary">
             Done
           </Link>{" "}
           &nbsp;
@@ -89,3 +91,4 @@ export default function CardCreate() {
     return "Loading...";
   }
 }
+export default CardCreate;

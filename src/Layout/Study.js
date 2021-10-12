@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { readDeck } from "../utils/api/index";
 
-export default function Study() {
+function Study() {
   const params = useParams();
   const deckId = params.deckId;
   const [front, setFront] = useState(true);
@@ -18,6 +18,7 @@ export default function Study() {
         setCards(dataFromAPI.cards);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -67,7 +68,6 @@ export default function Study() {
       </div>
     );
   }
-
   if (cards.length > 2) {
     console.log(cards[0].front);
     return (
@@ -120,3 +120,4 @@ export default function Study() {
     );
   }
 }
+export default Study;

@@ -28,5 +28,4 @@ const CardForm = ({ formData, handleChange }) => {
     </div>
   );
 };
-
 export default CardForm;

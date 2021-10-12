@@ -3,7 +3,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import CardForm from "./CardForm";
 import { readDeck, readCard, updateCard } from "../utils/api/index";
 
-export default function CardEdit() {
+function CardEdit() {
   const params = useParams();
   const deckId = params.deckId;
   const cardId = params.cardId;
@@ -15,10 +15,11 @@ export default function CardEdit() {
       try {
         const dataFromAPI = await readDeck(deckId);
         setDeck(dataFromAPI);
-        const dataFromAPI2 = await readCard(cardId);
-        setCard(dataFromAPI2);
+        const datafromApie2 = await readCard(cardId);
+        setCard(datafromApie2);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -47,6 +48,7 @@ export default function CardEdit() {
         history.push(`/decks/${deckId}`);
       } catch (error) {
         if (error.name === "AbortError") {
+          // Ignore `AbortError`
           console.log("Aborted");
         } else {
           throw error;
@@ -66,7 +68,7 @@ export default function CardEdit() {
             <Link to={`/decks/${deckId}`}>{deck.name}</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page" key="2">
-            Home
+            Edit Card {cardId}
           </li>
         </ol>
       </nav>
@@ -87,3 +89,4 @@ export default function CardEdit() {
     </div>
   );
 }
+export default CardEdit;
