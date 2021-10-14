@@ -122,7 +122,7 @@ function Deck() {
         </heading>
         <br />
         {cards.map((card) => (
-          <div className="card">
+          <div className="card" key={card.id}>
             <div className="card-body">
               <div className="container">
                 <div className="row justify-content-start">
