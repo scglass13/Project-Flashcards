@@ -10,6 +10,7 @@ function Study() {
   const [cards, setCards] = useState({});
   const [deck, setDeck] = useState({});
   useEffect(() => {
+    const abortController = new AbortController();
     setCards({});
     async function loadData() {
       try {
@@ -26,6 +27,9 @@ function Study() {
       }
     }
     loadData();
+    return () => {
+      abortController.abort();
+    };
   }, [deckId]);
 
   function flipCard() {

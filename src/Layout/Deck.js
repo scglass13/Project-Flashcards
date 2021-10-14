@@ -14,6 +14,7 @@ function Deck() {
   const deckId = params.deckId;
   //console.log(deckId);
   useEffect(() => {
+    const abortController = new AbortController();
     setCards({});
     async function loadData() {
       try {
@@ -31,6 +32,9 @@ function Deck() {
       }
     }
     loadData();
+    return () => {
+      abortController.abort();
+    };
   }, [deckId]);
 
   const history = useHistory();
@@ -83,7 +87,7 @@ function Deck() {
 
   if (cards.length > 0) {
     return (
-      <div>
+      <div key={cards.id}>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item" key="0">
@@ -117,9 +121,9 @@ function Deck() {
           </div>
         </div>
         <br />
-        <heading>
+        <header>
           <h2>Cards</h2>
-        </heading>
+        </header>
         <br />
         {cards.map((card) => (
           <div className="card" key={card.id}>

@@ -59,7 +59,7 @@ function CardCreate() {
 
   if (deck) {
     return (
-      <div>
+      <div key={deck.id}>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item" key="0">

@@ -5,11 +5,13 @@ import { listDecks, deleteDeck } from "../utils/api/index";
 export default function ListDecks() {
   const [decks, setDecks] = useState([]);
   useEffect(() => {
+    const abortController = new AbortController();
     async function loadData() {
       try {
-        const output = await listDecks();
+        const output = await listDecks(abortController.signal);
         setDecks(output);
       } catch (error) {
+        console.log(error);
         if (error.name === "AbortError") {
           console.log("Aborted");
         } else {
@@ -18,6 +20,9 @@ export default function ListDecks() {
       }
     }
     loadData();
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const handleDelete = async ({ target }) => {
@@ -48,7 +53,7 @@ export default function ListDecks() {
     return (
       <div>
         {decks.map((deck) => (
-          <div className="card">
+          <div className="card" key={deck.id}>
             <div className="container">
               <div className="row card-header">
                 <div className="col-10">

@@ -2,7 +2,7 @@ import React from "react";
 import ListDecks from "./ListDecks";
 import { Link } from "react-router-dom";
 
-export default function Home() {
+function Home() {
   return (
     <div>
       <div>
@@ -15,3 +15,4 @@ export default function Home() {
     </div>
   );
 }
+export default Home;
